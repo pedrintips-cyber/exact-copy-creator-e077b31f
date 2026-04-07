@@ -45,7 +45,7 @@ export function AdminSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="text-sidebar-foreground/70">
-            {!collapsed && "🔥 Sítio do Churrasco"}
+            {!collapsed && "🍕 Pizza House"}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -64,7 +64,7 @@ export function AdminSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-sidebar-foreground/70">{!collapsed && "Kit Churrasco"}</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-sidebar-foreground/70">{!collapsed && "Combos"}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {kitItems.map((item) => (
