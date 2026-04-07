@@ -123,11 +123,11 @@ const ProductScrollCard = ({ product }: { product: Product }) => {
         product.is_best_seller ? "border-2 border-success animate-pulse-green" : ""
       }`}
     >
-      <div className="w-full aspect-square rounded-2xl overflow-hidden border border-border bg-muted">
+      <div className="w-full rounded-2xl overflow-hidden border border-border bg-muted">
         {product.image_url ? (
-          <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" loading="lazy" />
+          <img src={product.image_url} alt={product.name} className="w-full h-auto object-contain" loading="lazy" />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-3xl">🥩</div>
+          <div className="w-full aspect-square flex items-center justify-center text-3xl">🥩</div>
         )}
       </div>
       <div className="p-2 flex flex-col">
