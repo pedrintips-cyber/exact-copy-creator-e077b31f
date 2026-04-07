@@ -1,13 +1,29 @@
 import {
-  LayoutDashboard, Package, FolderOpen, Image, Star,
-  ShoppingCart, Users, Settings, LogOut, Pizza, UtensilsCrossed
+  LayoutDashboard,
+  Package,
+  FolderOpen,
+  Image,
+  Star,
+  ShoppingCart,
+  Users,
+  Settings,
+  LogOut,
+  Pizza,
+  UtensilsCrossed,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import {
-  Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
-  SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar,
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 const menuItems = [
@@ -20,7 +36,7 @@ const menuItems = [
   { title: "Clientes", url: "/admin/clientes", icon: Users },
 ];
 
-const kitItems = [
+const comboItems = [
   { title: "Categorias do Combo", url: "/admin/kit-categorias", icon: UtensilsCrossed },
   { title: "Itens do Combo", url: "/admin/kit-itens", icon: Pizza },
 ];
@@ -40,8 +56,16 @@ export function AdminSidebar() {
     navigate("/admin/login");
   };
 
+  const navItemClassName =
+    "text-sidebar-foreground [&_*]:text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:[&_*]:text-sidebar-accent-foreground";
+  const activeClassName =
+    "bg-sidebar-accent text-sidebar-accent-foreground [&_*]:text-sidebar-accent-foreground font-medium";
+
   return (
-    <Sidebar collapsible="icon" className="bg-sidebar text-sidebar-foreground border-sidebar-border">
+    <Sidebar
+      collapsible="icon"
+      className="border-sidebar-border bg-sidebar text-sidebar-foreground [&_a]:text-sidebar-foreground [&_button]:text-sidebar-foreground [&_svg]:text-sidebar-foreground"
+    >
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="text-sidebar-foreground/70">
@@ -51,8 +75,13 @@ export function AdminSidebar() {
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
-                    <NavLink to={item.url} end={item.url === "/admin"} className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium">
+                  <SidebarMenuButton asChild className={navItemClassName}>
+                    <NavLink
+                      to={item.url}
+                      end={item.url === "/admin"}
+                      className={navItemClassName}
+                      activeClassName={activeClassName}
+                    >
                       <item.icon className="mr-2 h-4 w-4" />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
@@ -64,13 +93,15 @@ export function AdminSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-sidebar-foreground/70">{!collapsed && "Combos"}</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-sidebar-foreground/70">
+            {!collapsed && "Combos"}
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {kitItems.map((item) => (
+              {comboItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
-                    <NavLink to={item.url} className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium">
+                  <SidebarMenuButton asChild className={navItemClassName}>
+                    <NavLink to={item.url} className={navItemClassName} activeClassName={activeClassName}>
                       <item.icon className="mr-2 h-4 w-4" />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
@@ -87,8 +118,8 @@ export function AdminSidebar() {
             <SidebarMenu>
               {configItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
-                    <NavLink to={item.url} className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium">
+                  <SidebarMenuButton asChild className={navItemClassName}>
+                    <NavLink to={item.url} className={navItemClassName} activeClassName={activeClassName}>
                       <item.icon className="mr-2 h-4 w-4" />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
@@ -96,7 +127,7 @@ export function AdminSidebar() {
                 </SidebarMenuItem>
               ))}
               <SidebarMenuItem>
-                <SidebarMenuButton onClick={handleLogout} className="text-destructive hover:bg-destructive/10 cursor-pointer">
+                <SidebarMenuButton onClick={handleLogout} className="cursor-pointer text-destructive hover:bg-destructive/10">
                   <LogOut className="mr-2 h-4 w-4" />
                   {!collapsed && <span>Sair</span>}
                 </SidebarMenuButton>
