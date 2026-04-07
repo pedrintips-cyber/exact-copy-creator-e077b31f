@@ -7,48 +7,48 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 25%;
+    --foreground: 220 20% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 25%;
+    --card-foreground: 220 20% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 25%;
+    --popover-foreground: 220 20% 15%;
 
-    --primary: 355 85% 51%;
+    --primary: 15 80% 50%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 17% 95%;
-    --secondary-foreground: 0 0% 25%;
+    --secondary: 30 30% 95%;
+    --secondary-foreground: 220 20% 15%;
 
-    --muted: 210 17% 95%;
-    --muted-foreground: 0 0% 53%;
+    --muted: 30 15% 94%;
+    --muted-foreground: 220 10% 45%;
 
-    --accent: 210 17% 95%;
-    --accent-foreground: 0 0% 25%;
+    --accent: 15 60% 94%;
+    --accent-foreground: 220 20% 15%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 140 70% 25%;
+    --success: 150 60% 30%;
     --success-foreground: 0 0% 100%;
 
     --warning: 43 96% 56%;
 
-    --border: 0 0% 81%;
-    --input: 0 0% 81%;
-    --ring: 355 85% 51%;
+    --border: 30 15% 85%;
+    --input: 30 15% 85%;
+    --ring: 15 80% 50%;
 
     --radius: 1rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 220 15% 12%;
+    --sidebar-foreground: 30 20% 90%;
+    --sidebar-primary: 15 80% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 15% 18%;
+    --sidebar-accent-foreground: 30 20% 90%;
+    --sidebar-border: 220 15% 20%;
+    --sidebar-ring: 15 80% 50%;
   }
 }
 
@@ -72,7 +72,7 @@
   }
 
   .badge-open {
-    @apply px-2.5 py-1 rounded-full text-success bg-[hsl(120_100%_93%)] text-sm font-bold;
+    @apply px-2.5 py-1 rounded-full text-success bg-[hsl(150_60%_93%)] text-sm font-bold;
   }
 
   .badge-stock {
@@ -91,15 +91,15 @@
 @keyframes pulse-green {
   0% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(7, 124, 34, 0.7);
+    box-shadow: 0 0 0 0 hsla(15, 80%, 50%, 0.7);
   }
   70% {
     transform: scale(1);
-    box-shadow: 0 0 0 10px rgba(7, 124, 34, 0);
+    box-shadow: 0 0 0 10px hsla(15, 80%, 50%, 0);
   }
   100% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(7, 124, 34, 0);
+    box-shadow: 0 0 0 0 hsla(15, 80%, 50%, 0);
   }
 }
 

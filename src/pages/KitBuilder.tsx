@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
+import BottomNav from "@/components/BottomNav";
 
 interface KitCategory {
   id: string;
@@ -84,7 +85,7 @@ const KitBuilder = () => {
 
   const handleFinalize = () => {
     if (cart.size === 0) {
-      toast.error("Adicione pelo menos um item ao kit!");
+      toast.error("Adicione pelo menos um item ao combo!");
       return;
     }
     const items = Array.from(cart.values()).map(({ item, quantity }) => ({
@@ -95,14 +96,21 @@ const KitBuilder = () => {
     }));
     const msg = items.map((i) => `${i.quantity}${i.unit} ${i.name} - R$${i.price.toFixed(2)}`).join("\n");
     const total = getTotal();
-    const text = encodeURIComponent(`🔥 *Meu Kit Churrasco*\n\n${msg}\n\n*Total: R$ ${total.toFixed(2)}*`);
+    const text = encodeURIComponent(`🍣 *Meu Combo Sushi*\n\n${msg}\n\n*Total: R$ ${total.toFixed(2)}*`);
     window.open(`https://wa.me/?text=${text}`, "_blank");
   };
 
   if (categories.length === 0) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <p className="text-muted-foreground">Nenhuma categoria de kit configurada ainda.</p>
+      <div className="min-h-screen bg-background flex flex-col">
+        <div className="bg-primary p-4 text-center">
+          <h1 className="text-xl font-bold text-primary-foreground">🍣 Monte Seu Combo</h1>
+          <p className="text-primary-foreground/80 text-sm">Escolha seus sushis e acompanhamentos</p>
+        </div>
+        <div className="flex-1 flex items-center justify-center p-4">
+          <p className="text-muted-foreground">Nenhuma categoria configurada ainda.</p>
+        </div>
+        <BottomNav />
       </div>
     );
   }
@@ -110,8 +118,8 @@ const KitBuilder = () => {
   return (
     <div className="min-h-screen bg-background pb-32">
       <div className="bg-primary p-4 text-center">
-        <h1 className="text-xl font-bold text-primary-foreground">🔥 Crie Seu Kit Churrasco</h1>
-        <p className="text-primary-foreground/80 text-sm">Escolha as carnes, extras e bebidas</p>
+        <h1 className="text-xl font-bold text-primary-foreground">🍣 Monte Seu Combo</h1>
+        <p className="text-primary-foreground/80 text-sm">Escolha seus sushis e acompanhamentos</p>
       </div>
 
       {categories.map((cat) => {
@@ -160,15 +168,17 @@ const KitBuilder = () => {
         <div className="fixed bottom-16 left-0 right-0 bg-card border-t p-4 shadow-lg">
           <div className="container flex justify-between items-center">
             <div>
-              <p className="text-sm text-muted-foreground">{cart.size} itens no kit</p>
+              <p className="text-sm text-muted-foreground">{cart.size} itens no combo</p>
               <p className="text-xl font-bold text-success">R$ {getTotal().toFixed(2)}</p>
             </div>
             <Button onClick={handleFinalize} className="gap-2">
-              <ShoppingCart className="w-4 h-4" /> Finalizar Kit
+              <ShoppingCart className="w-4 h-4" /> Finalizar Combo
             </Button>
           </div>
         </div>
       )}
+
+      <BottomNav />
     </div>
   );
 };

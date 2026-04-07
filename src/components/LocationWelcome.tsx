@@ -50,20 +50,20 @@ const LocationWelcome = () => {
         <button onClick={handleClose} className="absolute top-2.5 right-2.5">
           <X className="w-4 h-4 text-muted-foreground" />
         </button>
-        <MapPin className="w-8 h-8 text-primary mx-auto mb-2" />
-        <p className="text-sm text-muted-foreground">Loja mais próxima de você</p>
+        <span className="text-4xl block mx-auto mb-2">🍣</span>
+        <p className="text-sm text-muted-foreground">Restaurante mais próximo de você</p>
         <p className="font-bold text-base text-foreground mt-0.5">
           📍 {location.city}, {location.region}
         </p>
         <div className="flex items-center justify-center gap-3 mt-3 text-xs">
-          <span className="bg-success/10 text-success font-semibold px-2.5 py-1 rounded-full">🔥 50% OFF</span>
+          <span className="bg-success/10 text-success font-semibold px-2.5 py-1 rounded-full">🍣 30% OFF</span>
           <span className="bg-success/10 text-success font-semibold px-2.5 py-1 rounded-full">🚚 Frete Grátis</span>
         </div>
         <button
           onClick={handleClose}
           className="mt-4 w-full py-2.5 bg-primary text-primary-foreground font-bold rounded-full text-sm"
         >
-          Ver ofertas
+          Ver cardápio
         </button>
       </div>
     </>

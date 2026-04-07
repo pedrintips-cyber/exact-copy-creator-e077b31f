@@ -56,8 +56,8 @@ const ProductList = () => {
           <div className="bg-secondary rounded-xl p-3 text-center text-sm mb-2">
             <b>Entrega Grátis</b> para <b>sua região</b>!
           </div>
-          <div className="bg-secondary rounded-xl p-3 text-center text-sm text-primary mb-4">
-            Aproveite nossa promoção com preços irresistíveis 💜
+          <div className="bg-accent rounded-xl p-3 text-center text-sm text-primary mb-4">
+            Experimente nossos sushis frescos com preços especiais 🍣
           </div>
           <p className="text-center text-muted-foreground text-sm py-8">Produtos em breve...</p>
         </div>
@@ -65,7 +65,6 @@ const ProductList = () => {
     );
   }
 
-  // Group products by category
   const uncategorized = products.filter((p) => !p.category_id);
   const grouped = categories
     .map((cat) => ({
@@ -80,8 +79,8 @@ const ProductList = () => {
         <div className="bg-secondary rounded-xl p-3 text-center text-sm mb-2">
           <b>Entrega Grátis</b> para <b>sua região</b>!
         </div>
-        <div className="bg-secondary rounded-xl p-3 text-center text-sm text-primary mb-4">
-          Aproveite nossa promoção com preços irresistíveis 💜
+        <div className="bg-accent rounded-xl p-3 text-center text-sm text-primary mb-4">
+          Experimente nossos sushis frescos com preços especiais 🍣
         </div>
       </div>
 
@@ -127,7 +126,7 @@ const ProductScrollCard = ({ product }: { product: Product }) => {
         {product.image_url ? (
           <img src={product.image_url} alt={product.name} className="w-full h-auto object-contain" loading="lazy" />
         ) : (
-          <div className="w-full aspect-square flex items-center justify-center text-3xl">🥩</div>
+          <div className="w-full aspect-square flex items-center justify-center text-3xl">🍣</div>
         )}
       </div>
       <div className="p-2 flex flex-col">

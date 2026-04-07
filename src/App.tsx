@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import Index from "./pages/Index.tsx";
-import Bebidas from "./pages/Bebidas.tsx";
+import Promocoes from "./pages/Bebidas.tsx";
 import KitBuilder from "./pages/KitBuilder.tsx";
 import AdminLogin from "./pages/AdminLogin.tsx";
 import AdminLayout from "./components/admin/AdminLayout.tsx";
@@ -32,7 +32,8 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/bebidas" element={<Bebidas />} />
+            <Route path="/promocoes" element={<Promocoes />} />
+            <Route path="/bebidas" element={<Promocoes />} />
             <Route path="/kit" element={<KitBuilder />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminLayout />}>

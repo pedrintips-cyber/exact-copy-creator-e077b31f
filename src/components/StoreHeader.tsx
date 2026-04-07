@@ -38,8 +38,8 @@ const StoreHeader = () => {
   }, [banners.length]);
 
   const bannerUrl = banners.length > 0 ? banners[currentBanner]?.image_url : null;
-  const storeName = settings.store_name || "Sítio do Churrasco";
-  const storeAddress = settings.store_address || "1,6km de você";
+  const storeName = settings.store_name || "Sushi House";
+  const storeAddress = settings.store_address || "Próximo a você";
   const openingHours = settings.opening_hours || "Entrega grátis";
 
   return (
@@ -69,7 +69,7 @@ const StoreHeader = () => {
         )}
         <div className="absolute bottom-0 left-0 right-0 h-16 bg-background rounded-t-[40px]" />
         <div className="absolute top-14 left-1/2 -translate-x-1/2 z-10 w-[120px] h-[120px] rounded-full border-4 border-background shadow-lg overflow-hidden bg-background flex items-center justify-center">
-          <span className="text-4xl">🔥</span>
+          <span className="text-4xl">🍣</span>
         </div>
       </div>
 
