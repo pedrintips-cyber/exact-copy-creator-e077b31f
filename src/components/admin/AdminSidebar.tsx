@@ -3,7 +3,7 @@ import {
   ShoppingCart, Users, Settings, LogOut, Beef, Beer, UtensilsCrossed
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
@@ -41,18 +41,18 @@ export function AdminSidebar() {
   };
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" className="bg-sidebar text-sidebar-foreground border-sidebar-border">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>
+          <SidebarGroupLabel className="text-sidebar-foreground/70">
             {!collapsed && "🔥 Sítio do Churrasco"}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink to={item.url} end={item.url === "/admin"} className="hover:bg-muted/50" activeClassName="bg-muted text-primary font-medium">
+                  <SidebarMenuButton asChild className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+                    <NavLink to={item.url} end={item.url === "/admin"} className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium">
                       <item.icon className="mr-2 h-4 w-4" />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
@@ -64,13 +64,13 @@ export function AdminSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>{!collapsed && "Kit Churrasco"}</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-sidebar-foreground/70">{!collapsed && "Kit Churrasco"}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {kitItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink to={item.url} className="hover:bg-muted/50" activeClassName="bg-muted text-primary font-medium">
+                  <SidebarMenuButton asChild className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+                    <NavLink to={item.url} className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium">
                       <item.icon className="mr-2 h-4 w-4" />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
@@ -82,13 +82,13 @@ export function AdminSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>{!collapsed && "Sistema"}</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-sidebar-foreground/70">{!collapsed && "Sistema"}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {configItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink to={item.url} className="hover:bg-muted/50" activeClassName="bg-muted text-primary font-medium">
+                  <SidebarMenuButton asChild className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+                    <NavLink to={item.url} className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium">
                       <item.icon className="mr-2 h-4 w-4" />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
@@ -96,7 +96,7 @@ export function AdminSidebar() {
                 </SidebarMenuItem>
               ))}
               <SidebarMenuItem>
-                <SidebarMenuButton onClick={handleLogout} className="hover:bg-destructive/10 text-destructive cursor-pointer">
+                <SidebarMenuButton onClick={handleLogout} className="text-destructive hover:bg-destructive/10 cursor-pointer">
                   <LogOut className="mr-2 h-4 w-4" />
                   {!collapsed && <span>Sair</span>}
                 </SidebarMenuButton>

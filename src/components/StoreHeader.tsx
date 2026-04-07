@@ -5,15 +5,26 @@ import { supabase } from "@/integrations/supabase/client";
 const StoreHeader = () => {
   const [banners, setBanners] = useState<{ id: string; image_url: string; title: string | null }[]>([]);
   const [currentBanner, setCurrentBanner] = useState(0);
+  const [settings, setSettings] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const load = async () => {
-      const { data } = await supabase
-        .from("banners")
-        .select("id, image_url, title")
-        .eq("active", true)
-        .order("sort_order");
-      setBanners(data || []);
+      const [{ data: bannerData }, { data: settingsData }] = await Promise.all([
+        supabase
+          .from("banners")
+          .select("id, image_url, title")
+          .eq("active", true)
+          .order("sort_order"),
+        supabase.from("site_settings").select("key, value"),
+      ]);
+
+      setBanners(bannerData || []);
+
+      const map: Record<string, string> = {};
+      settingsData?.forEach((item) => {
+        map[item.key] = item.value || "";
+      });
+      setSettings(map);
     };
     load();
   }, []);
@@ -27,6 +38,9 @@ const StoreHeader = () => {
   }, [banners.length]);
 
   const bannerUrl = banners.length > 0 ? banners[currentBanner]?.image_url : null;
+  const storeName = settings.store_name || "Sítio do Churrasco";
+  const storeAddress = settings.store_address || "1,6km de você";
+  const openingHours = settings.opening_hours || "Entrega grátis";
 
   return (
     <header className="bg-background border-b border-secondary">
@@ -61,15 +75,15 @@ const StoreHeader = () => {
 
       <div className="container flex flex-col items-center text-center pt-1 pb-2">
         <h1 className="text-xl md:text-2xl font-black text-foreground flex items-center gap-1">
-          Sítio do Churrasco
+          {storeName}
           <CheckCircle className="w-4 h-4 text-primary fill-primary stroke-primary-foreground" />
         </h1>
 
         <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
           <MapPin className="w-3 h-3" />
-          <span>1,6km de você</span>
+          <span>{storeAddress}</span>
           <span>•</span>
-          <span className="text-success">Entrega grátis</span>
+          <span className="text-success">{openingHours}</span>
         </div>
 
         <div className="flex items-center gap-1 text-sm mt-1 mb-2">
