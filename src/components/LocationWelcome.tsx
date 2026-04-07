@@ -50,13 +50,13 @@ const LocationWelcome = () => {
         <button onClick={handleClose} className="absolute top-2.5 right-2.5">
           <X className="w-4 h-4 text-muted-foreground" />
         </button>
-        <span className="text-4xl block mx-auto mb-2">🍣</span>
-        <p className="text-sm text-muted-foreground">Restaurante mais próximo de você</p>
+        <span className="text-4xl block mx-auto mb-2">🍕</span>
+        <p className="text-sm text-muted-foreground">Pizzaria mais próxima de você</p>
         <p className="font-bold text-base text-foreground mt-0.5">
           📍 {location.city}, {location.region}
         </p>
         <div className="flex items-center justify-center gap-3 mt-3 text-xs">
-          <span className="bg-success/10 text-success font-semibold px-2.5 py-1 rounded-full">🍣 30% OFF</span>
+          <span className="bg-success/10 text-success font-semibold px-2.5 py-1 rounded-full">🍕 30% OFF</span>
           <span className="bg-success/10 text-success font-semibold px-2.5 py-1 rounded-full">🚚 Frete Grátis</span>
         </div>
         <button

@@ -1,11 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-import { Fish, Flame, ChefHat } from "lucide-react";
+import { Pizza, Flame, ChefHat } from "lucide-react";
 
 const BottomNav = () => {
   const { pathname } = useLocation();
 
   const items = [
-    { to: "/", label: "Cardápio", icon: Fish },
+    { to: "/", label: "Cardápio", icon: Pizza },
     { to: "/promocoes", label: "Promoções", icon: Flame },
     { to: "/kit", label: "Monte o Seu", icon: ChefHat },
   ];

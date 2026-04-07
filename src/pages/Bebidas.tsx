@@ -42,12 +42,12 @@ const Promocoes = () => {
     <div className="min-h-screen bg-background pb-20">
       <div className="bg-primary p-4 text-center">
         <h1 className="text-xl font-bold text-primary-foreground">🔥 Promoções</h1>
-        <p className="text-primary-foreground/80 text-sm">Sushis frescos com descontos imperdíveis</p>
+        <p className="text-primary-foreground/80 text-sm">Pizzas artesanais com descontos imperdíveis</p>
       </div>
 
       {grouped.length === 0 ? (
         <div className="p-8 text-center">
-          <span className="text-4xl block mb-3">🍣</span>
+          <span className="text-4xl block mb-3">🍕</span>
           <p className="text-muted-foreground">Nenhuma promoção ativa no momento.</p>
           <p className="text-sm text-muted-foreground mt-2">
             Fique de olho! Novas promoções em breve.
@@ -64,7 +64,7 @@ const Promocoes = () => {
                     {p.image_url ? (
                       <img src={p.image_url} alt={p.name} className="w-full h-auto object-contain" loading="lazy" />
                     ) : (
-                      <div className="w-full aspect-square flex items-center justify-center text-2xl">🍣</div>
+                      <div className="w-full aspect-square flex items-center justify-center text-2xl">🍕</div>
                     )}
                   </div>
                   <div className="p-2 flex flex-col">

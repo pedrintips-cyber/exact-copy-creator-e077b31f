@@ -80,7 +80,7 @@ const ProductList = () => {
           <b>Entrega Grátis</b> para <b>sua região</b>!
         </div>
         <div className="bg-accent rounded-xl p-3 text-center text-sm text-primary mb-4">
-          Experimente nossos sushis frescos com preços especiais 🍣
+          Experimente nossas pizzas artesanais com preços especiais 🍕
         </div>
       </div>
 
@@ -126,7 +126,7 @@ const ProductScrollCard = ({ product }: { product: Product }) => {
         {product.image_url ? (
           <img src={product.image_url} alt={product.name} className="w-full h-auto object-contain" loading="lazy" />
         ) : (
-          <div className="w-full aspect-square flex items-center justify-center text-3xl">🍣</div>
+          <div className="w-full aspect-square flex items-center justify-center text-3xl">🍕</div>
         )}
       </div>
       <div className="p-2 flex flex-col">

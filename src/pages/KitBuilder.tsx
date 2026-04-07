@@ -96,7 +96,7 @@ const KitBuilder = () => {
     }));
     const msg = items.map((i) => `${i.quantity}${i.unit} ${i.name} - R$${i.price.toFixed(2)}`).join("\n");
     const total = getTotal();
-    const text = encodeURIComponent(`🍣 *Meu Combo Sushi*\n\n${msg}\n\n*Total: R$ ${total.toFixed(2)}*`);
+    const text = encodeURIComponent(`🍕 *Meu Combo Pizza*\n\n${msg}\n\n*Total: R$ ${total.toFixed(2)}*`);
     window.open(`https://wa.me/?text=${text}`, "_blank");
   };
 
@@ -104,8 +104,8 @@ const KitBuilder = () => {
     return (
       <div className="min-h-screen bg-background flex flex-col">
         <div className="bg-primary p-4 text-center">
-          <h1 className="text-xl font-bold text-primary-foreground">🍣 Monte Seu Combo</h1>
-          <p className="text-primary-foreground/80 text-sm">Escolha seus sushis e acompanhamentos</p>
+          <h1 className="text-xl font-bold text-primary-foreground">🍕 Monte Sua Pizza</h1>
+          <p className="text-primary-foreground/80 text-sm">Escolha seus sabores e acompanhamentos</p>
         </div>
         <div className="flex-1 flex items-center justify-center p-4">
           <p className="text-muted-foreground">Nenhuma categoria configurada ainda.</p>
@@ -118,8 +118,8 @@ const KitBuilder = () => {
   return (
     <div className="min-h-screen bg-background pb-32">
       <div className="bg-primary p-4 text-center">
-        <h1 className="text-xl font-bold text-primary-foreground">🍣 Monte Seu Combo</h1>
-        <p className="text-primary-foreground/80 text-sm">Escolha seus sushis e acompanhamentos</p>
+          <h1 className="text-xl font-bold text-primary-foreground">🍕 Monte Sua Pizza</h1>
+          <p className="text-primary-foreground/80 text-sm">Escolha seus sabores e acompanhamentos</p>
       </div>
 
       {categories.map((cat) => {

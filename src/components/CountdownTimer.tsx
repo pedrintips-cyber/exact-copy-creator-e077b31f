@@ -29,7 +29,7 @@ const CountdownTimer = () => {
 
   return (
     <div className="bg-primary py-2 px-4 flex flex-col items-center">
-      <b className="text-primary-foreground text-xs mb-1">🍣 Promoção especial acaba em:</b>
+      <b className="text-primary-foreground text-xs mb-1">🍕 Promoção especial acaba em:</b>
       <div className="flex items-center gap-5">
         <div className="flex flex-col items-center">
           <span className="bg-primary-foreground/20 text-primary-foreground font-semibold text-base px-3 py-1 rounded-md min-w-[50px] text-center">
