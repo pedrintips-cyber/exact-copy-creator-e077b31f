@@ -1,22 +1,16 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ShoppingCart, DollarSign, Users, Eye, Package, TrendingUp } from "lucide-react";
+import { ShoppingCart, DollarSign, Eye, Package, TrendingUp } from "lucide-react";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
-    totalOrders: 0,
-    pendingOrders: 0,
-    paidOrders: 0,
-    totalRevenue: 0,
-    totalProducts: 0,
-    totalVisits: 0,
+    totalOrders: 0, pendingOrders: 0, paidOrders: 0,
+    totalRevenue: 0, totalProducts: 0, totalVisits: 0,
     recentOrders: [] as any[],
   });
 
-  useEffect(() => {
-    loadStats();
-  }, []);
+  useEffect(() => { loadStats(); }, []);
 
   const loadStats = async () => {
     const [orders, products, visits] = await Promise.all([
@@ -43,7 +37,7 @@ const AdminDashboard = () => {
 
   const cards = [
     { title: "Pedidos", value: stats.totalOrders, icon: ShoppingCart, color: "text-primary" },
-    { title: "Pendentes", value: stats.pendingOrders, icon: ShoppingCart, color: "text-warning" },
+    { title: "Pendentes", value: stats.pendingOrders, icon: ShoppingCart, color: "text-orange-500" },
     { title: "Pagos", value: stats.paidOrders, icon: DollarSign, color: "text-success" },
     { title: "Receita", value: `R$ ${stats.totalRevenue.toFixed(2)}`, icon: TrendingUp, color: "text-success" },
     { title: "Produtos", value: stats.totalProducts, icon: Package, color: "text-primary" },
@@ -52,46 +46,46 @@ const AdminDashboard = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+      <h1 className="text-xl md:text-2xl font-bold mb-4">Dashboard</h1>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
         {cards.map((card) => (
           <Card key={card.title}>
-            <CardHeader className="pb-2 p-4">
-              <CardTitle className="text-xs font-medium text-muted-foreground flex items-center gap-1">
+            <CardHeader className="pb-1 p-3">
+              <CardTitle className="text-[11px] font-medium text-muted-foreground flex items-center gap-1">
                 <card.icon className={`w-3.5 h-3.5 ${card.color}`} />
                 {card.title}
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-4 pt-0">
-              <p className="text-xl font-bold">{card.value}</p>
+            <CardContent className="p-3 pt-0">
+              <p className="text-lg font-bold truncate">{card.value}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Últimos Pedidos</CardTitle>
+        <CardHeader className="p-3 md:p-6">
+          <CardTitle className="text-base">Últimos Pedidos</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-3 md:p-6 pt-0">
           {stats.recentOrders.length === 0 ? (
             <p className="text-muted-foreground text-sm">Nenhum pedido ainda</p>
           ) : (
             <div className="space-y-2">
               {stats.recentOrders.map((order) => (
-                <div key={order.id} className="flex justify-between items-center border-b pb-2">
-                  <div>
-                    <p className="font-medium text-sm">{order.customer_name}</p>
+                <div key={order.id} className="flex justify-between items-center border-b pb-2 gap-2">
+                  <div className="min-w-0">
+                    <p className="font-medium text-sm truncate">{order.customer_name}</p>
                     <p className="text-xs text-muted-foreground">{order.customer_phone}</p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right shrink-0">
                     <p className="font-bold text-sm">R$ {Number(order.total).toFixed(2)}</p>
                     <span className={`text-xs px-2 py-0.5 rounded-full ${
                       order.status === "paid" || order.status === "delivered"
                         ? "bg-success/10 text-success"
                         : order.status === "cancelled"
                         ? "bg-destructive/10 text-destructive"
-                        : "bg-warning/10 text-warning"
+                        : "bg-orange-100 text-orange-600"
                     }`}>
                       {order.status === "pending" ? "Pendente" :
                        order.status === "paid" ? "Pago" :

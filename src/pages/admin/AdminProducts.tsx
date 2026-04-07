@@ -3,11 +3,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface Product {
   id: string;
@@ -133,17 +133,17 @@ const AdminProducts = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Produtos</h1>
+      <div className="flex justify-between items-center mb-4 gap-2">
+        <h1 className="text-xl md:text-2xl font-bold truncate">Produtos</h1>
         <Dialog open={open} onOpenChange={(o) => { if (!o) resetForm(); else setOpen(true); }}>
           <DialogTrigger asChild>
-            <Button><Plus className="w-4 h-4 mr-2" /> Novo Produto</Button>
+            <Button size="sm"><Plus className="w-4 h-4 mr-1" /> <span className="hidden sm:inline">Novo Produto</span><span className="sm:hidden">Novo</span></Button>
           </DialogTrigger>
-          <DialogContent className="max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-h-[90vh] overflow-y-auto max-w-[95vw] sm:max-w-lg">
             <DialogHeader>
               <DialogTitle>{editing ? "Editar" : "Novo"} Produto</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
+            <div className="space-y-3">
               <Input placeholder="Nome" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
               <Input placeholder="Descrição" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
               <div className="grid grid-cols-2 gap-2">
@@ -179,41 +179,74 @@ const AdminProducts = () => {
         </Dialog>
       </div>
 
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Imagem</TableHead>
-              <TableHead>Nome</TableHead>
-              <TableHead>Categoria</TableHead>
-              <TableHead>Preço</TableHead>
-              <TableHead>Ativo</TableHead>
-              <TableHead>Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
+      {/* Mobile: cards. Desktop: table */}
+      <div className="block md:hidden space-y-3">
+        {products.map((p) => (
+          <Card key={p.id}>
+            <CardContent className="p-3 flex gap-3">
+              <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted shrink-0">
+                {p.image_url ? <img src={p.image_url} alt={p.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-2xl">🥩</div>}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="font-medium text-sm truncate">{p.name}</p>
+                    <p className="text-xs text-muted-foreground">{getCategoryName(p.category_id)}</p>
+                  </div>
+                  <Switch checked={p.active} onCheckedChange={() => toggleActive(p.id, p.active)} />
+                </div>
+                <div className="flex items-center justify-between mt-1">
+                  <div>
+                    {p.old_price && <span className="text-xs text-muted-foreground line-through mr-1">R$ {Number(p.old_price).toFixed(2)}</span>}
+                    <span className="text-sm font-bold text-success">R$ {Number(p.new_price).toFixed(2)}</span>
+                  </div>
+                  <div className="flex gap-1">
+                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleEdit(p)}><Pencil className="w-3.5 h-3.5" /></Button>
+                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleDelete(p.id)}><Trash2 className="w-3.5 h-3.5 text-destructive" /></Button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+        {products.length === 0 && <p className="text-center text-muted-foreground text-sm py-8">Nenhum produto cadastrado</p>}
+      </div>
+
+      <div className="hidden md:block overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b">
+              <th className="text-left p-2">Imagem</th>
+              <th className="text-left p-2">Nome</th>
+              <th className="text-left p-2">Categoria</th>
+              <th className="text-left p-2">Preço</th>
+              <th className="text-left p-2">Ativo</th>
+              <th className="text-left p-2">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
             {products.map((p) => (
-              <TableRow key={p.id}>
-                <TableCell>
+              <tr key={p.id} className="border-b">
+                <td className="p-2">
                   {p.image_url ? <img src={p.image_url} alt={p.name} className="w-12 h-12 object-cover rounded" /> : "—"}
-                </TableCell>
-                <TableCell className="font-medium">{p.name}</TableCell>
-                <TableCell>{getCategoryName(p.category_id)}</TableCell>
-                <TableCell>
-                  {p.old_price && <span className="text-price-old mr-1">R$ {Number(p.old_price).toFixed(2)}</span>}
+                </td>
+                <td className="p-2 font-medium">{p.name}</td>
+                <td className="p-2">{getCategoryName(p.category_id)}</td>
+                <td className="p-2">
+                  {p.old_price && <span className="text-muted-foreground line-through mr-1">R$ {Number(p.old_price).toFixed(2)}</span>}
                   <span className="text-success font-bold">R$ {Number(p.new_price).toFixed(2)}</span>
-                </TableCell>
-                <TableCell><Switch checked={p.active} onCheckedChange={() => toggleActive(p.id, p.active)} /></TableCell>
-                <TableCell>
-                  <div className="flex gap-2">
+                </td>
+                <td className="p-2"><Switch checked={p.active} onCheckedChange={() => toggleActive(p.id, p.active)} /></td>
+                <td className="p-2">
+                  <div className="flex gap-1">
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(p)}><Pencil className="w-4 h-4" /></Button>
                     <Button variant="ghost" size="icon" onClick={() => handleDelete(p.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
                   </div>
-                </TableCell>
-              </TableRow>
+                </td>
+              </tr>
             ))}
-          </TableBody>
-        </Table>
+          </tbody>
+        </table>
       </div>
     </div>
   );

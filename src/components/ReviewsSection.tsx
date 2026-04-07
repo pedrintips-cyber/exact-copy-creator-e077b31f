@@ -1,47 +1,59 @@
+import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
-const reviews = [
-  { name: "Carlos M", text: "Simplesmente perfeito! A comida é deliciosa, bem temperada e sempre quentinha. Melhor marmitaria que já experimentei." },
-  { name: "Ana Paula S", text: "Entrega rápida e marmita super bem servida! Dá para ver que os ingredientes são frescos e de qualidade. Virei cliente fiel!" },
-  { name: "Rodrigo L.", text: "Sabor de comida caseira que lembra a da minha mãe! Tudo muito bem feito, bem embalado e sempre no capricho" },
-  { name: "Fernanda R", text: "Melhor custo-benefício! Porção generosa, comida deliciosa e preço justo. Recomendo para todo mundo!" },
-  { name: "Marcos P", text: "Já pedi em várias marmitarias, mas essa aqui superou todas! Sabor incrível e um atendimento impecável." },
-  { name: "Juliana C", text: "Perfeito para o dia a dia! Variedade no cardápio, tempero na medida certa e sempre entregam no horário." },
-  { name: "Rafael T", text: "Bom, barato e entrega rápida. Não tem erro, semana que vem peço de novo" },
-  { name: "Iana", text: "Pedi pela primeira vez e td mundo gostou, vamos pedir mais!" },
-  { name: "Gustavo", text: "Sempre que posso, peço aqui! Qualidade incrível, e a comida chega sempre quentinha. Nota 10!" },
-  { name: "Ana", text: "Aquele almoço perfeito que faz o dia ficar melhor! Tudo delicioso, bem servido e chega rapidinho." },
-];
+interface Review {
+  id: string;
+  customer_name: string;
+  text: string;
+  rating: number;
+}
 
-const Stars = () => (
+const Stars = ({ rating }: { rating: number }) => (
   <div className="flex">
     {[...Array(5)].map((_, i) => (
-      <Star key={i} className="w-3.5 h-3.5 fill-warning text-warning" />
+      <Star key={i} className={`w-3.5 h-3.5 ${i < rating ? "fill-warning text-warning" : "text-muted"}`} />
     ))}
   </div>
 );
 
 const ReviewsSection = () => {
+  const [reviews, setReviews] = useState<Review[]>([]);
+
+  useEffect(() => {
+    const load = async () => {
+      const { data } = await supabase
+        .from("reviews")
+        .select("id, customer_name, text, rating")
+        .eq("active", true)
+        .order("created_at", { ascending: false });
+      setReviews(data || []);
+    };
+    load();
+  }, []);
+
+  if (reviews.length === 0) return null;
+
+  const avg = reviews.reduce((s, r) => s + Number(r.rating), 0) / reviews.length;
+
   return (
     <section className="container pb-20">
-      {/* Rating summary */}
       <div className="bg-secondary rounded-xl p-4 text-center mb-4">
-        <b className="text-xl">4.9/5</b>
+        <b className="text-xl">{avg.toFixed(1)}/5</b>
         <div className="flex justify-center mt-1">
-          <Stars />
+          <Stars rating={Math.round(avg)} />
         </div>
-        <p className="text-muted-foreground text-sm mt-1">1360 avaliações no total</p>
+        <p className="text-muted-foreground text-sm mt-1">{reviews.length} avaliações no total</p>
       </div>
 
-      {/* Individual reviews */}
       <div className="space-y-0">
-        {reviews.map((review, i) => (
-          <div key={i} className="flex items-start py-3 border-b border-border">
+        {reviews.map((review) => (
+          <div key={review.id} className="flex items-start py-3 border-b border-border">
             <div className="flex-1">
-              <h3 className="font-semibold text-base text-foreground">{review.name}</h3>
+              <h3 className="font-semibold text-base text-foreground">{review.customer_name}</h3>
               <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="font-bold text-sm">5.0</span>
-                <Stars />
+                <span className="font-bold text-sm">{Number(review.rating).toFixed(1)}</span>
+                <Stars rating={Math.round(Number(review.rating))} />
               </div>
               <p className="text-sm text-muted-foreground mt-1">{review.text}</p>
             </div>
