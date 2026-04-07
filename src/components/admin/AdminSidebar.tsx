@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, Package, FolderOpen, Image, Star,
-  ShoppingCart, Users, Settings, LogOut, Beef, Beer, UtensilsCrossed
+  ShoppingCart, Users, Settings, LogOut, Pizza, UtensilsCrossed
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useNavigate } from "react-router-dom";
@@ -21,8 +21,8 @@ const menuItems = [
 ];
 
 const kitItems = [
-  { title: "Categorias do Kit", url: "/admin/kit-categorias", icon: UtensilsCrossed },
-  { title: "Itens do Kit", url: "/admin/kit-itens", icon: Beef },
+  { title: "Categorias do Combo", url: "/admin/kit-categorias", icon: UtensilsCrossed },
+  { title: "Itens do Combo", url: "/admin/kit-itens", icon: Pizza },
 ];
 
 const configItems = [
@@ -45,7 +45,7 @@ export function AdminSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="text-sidebar-foreground/70">
-            {!collapsed && "🔥 Sítio do Churrasco"}
+            {!collapsed && "🍕 Pizza House"}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -64,7 +64,7 @@ export function AdminSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-sidebar-foreground/70">{!collapsed && "Kit Churrasco"}</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-sidebar-foreground/70">{!collapsed && "Combos"}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {kitItems.map((item) => (
