@@ -137,7 +137,7 @@ const ProductDetails = () => {
       }
 
       if (selected.length >= group.max_select) {
-        toast.error(`Você pode escolher até ${group.max_select} opção(ões) em ${group.name}.`);
+        toast.error(`Máximo ${group.max_select} opção(ões) em ${group.name}.`);
         return current;
       }
 
@@ -150,16 +150,10 @@ const ProductDetails = () => {
       const selected = selectedItems[group.id] || [];
 
       if (selected.length < group.min_select) {
-        toast.error(`Escolha pelo menos ${group.min_select} opção(ões) em ${group.name}.`);
-        return false;
-      }
-
-      if (selected.length > group.max_select) {
-        toast.error(`Escolha no máximo ${group.max_select} opção(ões) em ${group.name}.`);
+        toast.error(`Escolha pelo menos ${group.min_select} em ${group.name}.`);
         return false;
       }
     }
-
     return true;
   };
 
@@ -176,75 +170,88 @@ const ProductDetails = () => {
       selections: selectedOptionObjects,
     });
 
-    toast.success("Pizza adicionada ao carrinho");
+    toast.success("Adicionado ao carrinho!");
     navigate("/carrinho");
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-background p-4 text-muted-foreground">Carregando produto...</div>;
+    return <div className="min-h-screen bg-background p-4 text-muted-foreground text-sm">Carregando...</div>;
   }
 
   if (!product) {
     return (
       <div className="min-h-screen bg-background p-4">
-        <Link to="/" className="mb-4 inline-flex items-center gap-2 text-sm text-muted-foreground">
-          <ArrowLeft className="h-4 w-4" /> Voltar ao cardápio
+        <Link to="/" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground mb-3">
+          <ArrowLeft className="h-3.5 w-3.5" /> Voltar
         </Link>
-        <div className="rounded-3xl border border-border bg-card p-6 text-center">
-          <p className="text-lg font-semibold">Produto não encontrado.</p>
+        <div className="rounded-xl border border-border bg-card p-4 text-center">
+          <p className="text-sm font-semibold">Produto não encontrado.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background pb-36">
-      <div className="container max-w-3xl px-4 py-4">
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground">
-            <ArrowLeft className="h-4 w-4" /> Voltar ao cardápio
+    <div className="min-h-screen bg-background pb-24">
+      <div className="max-w-lg mx-auto px-3 py-3">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-3">
+          <Link to="/" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ArrowLeft className="h-3.5 w-3.5" /> Voltar
           </Link>
-          <Link to="/carrinho" className="text-sm font-medium text-primary">
+          <Link to="/carrinho" className="text-xs font-medium text-primary">
             Ver carrinho
           </Link>
         </div>
 
-        <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
-          <div className="flex min-h-[220px] items-center justify-center border-b border-border bg-muted p-4">
+        {/* Product Card */}
+        <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+          {/* Image */}
+          <div className="flex items-center justify-center bg-muted border-b border-border p-3 min-h-[160px]">
             {product.image_url ? (
-              <img src={product.image_url} alt={product.name} className="max-h-[300px] w-full object-contain" />
+              <img src={product.image_url} alt={product.name} className="max-h-[180px] w-full object-contain" />
             ) : (
-              <div className="text-6xl">🍕</div>
+              <div className="text-5xl">🍕</div>
             )}
           </div>
 
-          <div className="space-y-5 p-5">
+          <div className="p-3 space-y-3">
+            {/* Name & Price */}
             <div>
-              <h1 className="text-2xl font-black text-foreground">{product.name}</h1>
-              {product.description && <p className="mt-2 text-sm text-muted-foreground">{product.description}</p>}
-              <div className="mt-3 flex items-end gap-2">
-                {product.old_price && <span className="text-sm text-price-old">{formatPrice(Number(product.old_price))}</span>}
-                <span className="text-2xl font-black text-success">{formatPrice(Number(product.new_price) + extraPrice)}</span>
+              <h1 className="text-lg font-bold text-foreground leading-tight">{product.name}</h1>
+              {product.description && (
+                <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{product.description}</p>
+              )}
+              <div className="mt-2 flex items-baseline gap-2">
+                {product.old_price && (
+                  <span className="text-xs line-through text-muted-foreground">
+                    {formatPrice(Number(product.old_price))}
+                  </span>
+                )}
+                <span className="text-lg font-bold text-success">
+                  {formatPrice(Number(product.new_price) + extraPrice)}
+                </span>
               </div>
             </div>
 
+            {/* Option Groups */}
             {groups.map((group) => {
               const selected = selectedItems[group.id] || [];
               const groupItems = groupedItems[group.id] || [];
 
               return (
-                <section key={group.id} className="rounded-2xl border border-border bg-background p-4">
-                  <div className="mb-3">
-                    <h2 className="text-base font-bold text-foreground">{group.name}</h2>
-                    <p className="text-xs text-muted-foreground">
+                <section key={group.id} className="rounded-lg border border-border bg-background p-3">
+                  <div className="mb-2">
+                    <h2 className="text-sm font-semibold text-foreground">{group.name}</h2>
+                    <p className="text-[10px] text-muted-foreground">
                       {group.description ||
                         (group.selection_type === "single"
                           ? "Escolha 1 opção"
-                          : `Escolha de ${group.min_select} até ${group.max_select} opções`)}
+                          : `De ${group.min_select} até ${group.max_select} opções`)}
                     </p>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     {groupItems.map((item) => {
                       const active = selected.includes(item.id);
 
@@ -253,14 +260,14 @@ const ProductDetails = () => {
                           key={item.id}
                           type="button"
                           onClick={() => toggleSelection(group, item.id)}
-                          className={`flex w-full items-center justify-between rounded-2xl border px-4 py-3 text-left transition-colors ${
+                          className={`flex w-full items-center justify-between rounded-lg border px-3 py-2 text-left transition-colors ${
                             active
                               ? "border-primary bg-accent text-accent-foreground"
                               : "border-border bg-card text-foreground"
                           }`}
                         >
-                          <span className="font-medium">{item.name}</span>
-                          <span className="text-sm font-semibold text-success">
+                          <span className="text-xs font-medium">{item.name}</span>
+                          <span className="text-[10px] font-semibold text-success whitespace-nowrap ml-2">
                             {item.price_adjustment > 0 ? `+ ${formatPrice(Number(item.price_adjustment))}` : "Incluso"}
                           </span>
                         </button>
@@ -271,17 +278,23 @@ const ProductDetails = () => {
               );
             })}
 
-            <div className="flex items-center justify-between rounded-2xl border border-border bg-background p-4">
+            {/* Quantity */}
+            <div className="flex items-center justify-between rounded-lg border border-border bg-background px-3 py-2">
               <div>
-                <p className="text-sm text-muted-foreground">Quantidade</p>
-                <p className="text-lg font-bold">{quantity} pizza(s)</p>
+                <p className="text-[10px] text-muted-foreground">Quantidade</p>
+                <p className="text-sm font-bold">{quantity}</p>
               </div>
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="icon" onClick={() => setQuantity((value) => Math.max(1, value - 1))}>
-                  <Minus className="h-4 w-4" />
+              <div className="flex items-center gap-1.5">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-7 w-7"
+                  onClick={() => setQuantity((v) => Math.max(1, v - 1))}
+                >
+                  <Minus className="h-3 w-3" />
                 </Button>
-                <Button size="icon" onClick={() => setQuantity((value) => value + 1)}>
-                  <Plus className="h-4 w-4" />
+                <Button size="icon" className="h-7 w-7" onClick={() => setQuantity((v) => v + 1)}>
+                  <Plus className="h-3 w-3" />
                 </Button>
               </div>
             </div>
@@ -289,14 +302,15 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-card/95 p-4 backdrop-blur">
-        <div className="container flex items-center justify-between gap-3">
-          <div>
-            <p className="text-sm text-muted-foreground">Total do item</p>
-            <p className="text-2xl font-black text-success">{formatPrice(totalPrice)}</p>
+      {/* Fixed Bottom Bar */}
+      <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-card/95 backdrop-blur px-3 py-2.5 z-50">
+        <div className="max-w-lg mx-auto flex items-center justify-between gap-2">
+          <div className="min-w-0">
+            <p className="text-[10px] text-muted-foreground">Total</p>
+            <p className="text-base font-bold text-success truncate">{formatPrice(totalPrice)}</p>
           </div>
-          <Button onClick={handleAddToCart} className="gap-2">
-            <ShoppingCart className="h-4 w-4" /> Adicionar ao carrinho
+          <Button onClick={handleAddToCart} size="sm" className="gap-1.5 text-xs shrink-0">
+            <ShoppingCart className="h-3.5 w-3.5" /> Adicionar
           </Button>
         </div>
       </div>

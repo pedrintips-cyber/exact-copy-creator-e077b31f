@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Pizza, Flame, ChefHat } from "lucide-react";
+import { Pizza, Flame } from "lucide-react";
 
 const BottomNav = () => {
   const { pathname } = useLocation();
@@ -7,11 +7,10 @@ const BottomNav = () => {
   const items = [
     { to: "/", label: "Cardápio", icon: Pizza },
     { to: "/promocoes", label: "Promoções", icon: Flame },
-    { to: "/kit", label: "Monte o Seu", icon: ChefHat },
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t z-50 safe-area-bottom">
+    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50 safe-area-bottom">
       <div className="flex justify-around items-center h-14">
         {items.map((item) => {
           const active = pathname === item.to;
