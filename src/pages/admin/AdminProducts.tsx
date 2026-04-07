@@ -8,6 +8,7 @@ import { Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent } from "@/components/ui/card";
+import { ProductCustomizationDialog } from "@/components/admin/ProductCustomizationDialog";
 
 interface Product {
   id: string;
@@ -200,7 +201,8 @@ const AdminProducts = () => {
                     {p.old_price && <span className="text-xs text-muted-foreground line-through mr-1">R$ {Number(p.old_price).toFixed(2)}</span>}
                     <span className="text-sm font-bold text-success">R$ {Number(p.new_price).toFixed(2)}</span>
                   </div>
-                  <div className="flex gap-1">
+                  <div className="flex flex-wrap gap-1 justify-end">
+                    <ProductCustomizationDialog product={{ id: p.id, name: p.name }} />
                     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleEdit(p)}><Pencil className="w-3.5 h-3.5" /></Button>
                     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleDelete(p.id)}><Trash2 className="w-3.5 h-3.5 text-destructive" /></Button>
                   </div>
@@ -238,7 +240,8 @@ const AdminProducts = () => {
                 </td>
                 <td className="p-2"><Switch checked={p.active} onCheckedChange={() => toggleActive(p.id, p.active)} /></td>
                 <td className="p-2">
-                  <div className="flex gap-1">
+                  <div className="flex flex-wrap gap-1">
+                    <ProductCustomizationDialog product={{ id: p.id, name: p.name }} />
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(p)}><Pencil className="w-4 h-4" /></Button>
                     <Button variant="ghost" size="icon" onClick={() => handleDelete(p.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
                   </div>

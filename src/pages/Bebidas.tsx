@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import BottomNav from "@/components/BottomNav";
+import { Link } from "react-router-dom";
 
 interface Product {
   id: string;
@@ -59,7 +60,7 @@ const Promocoes = () => {
             <h2 className="text-lg font-bold text-primary px-4 mb-3">{cat.icon} {cat.name}</h2>
             <div className="flex gap-3 overflow-x-auto px-4 pb-2 snap-x snap-mandatory scrollbar-hide">
               {cat.products.map((p) => (
-                <a key={p.id} href="#" className="flex-shrink-0 w-[160px] snap-start rounded-2xl overflow-hidden product-card">
+                <Link to={`/produto/${p.id}`} key={p.id} className="flex-shrink-0 w-[160px] snap-start rounded-2xl overflow-hidden product-card">
                   <div className="w-full rounded-2xl overflow-hidden border border-border bg-muted">
                     {p.image_url ? (
                       <img src={p.image_url} alt={p.name} className="w-full h-auto object-contain" loading="lazy" />
@@ -76,7 +77,7 @@ const Promocoes = () => {
                     )}
                     <span className="text-success font-bold text-base">R$ {Number(p.new_price).toFixed(2)}</span>
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
           </section>

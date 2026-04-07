@@ -46,8 +46,8 @@ const configItems = [
 ];
 
 export function AdminSidebar() {
-  const { state } = useSidebar();
-  const collapsed = state === "collapsed";
+  const { state, isMobile } = useSidebar();
+  const collapsed = state === "collapsed" && !isMobile;
   const { signOut } = useAuth();
   const navigate = useNavigate();
 
@@ -127,7 +127,7 @@ export function AdminSidebar() {
                 </SidebarMenuItem>
               ))}
               <SidebarMenuItem>
-                <SidebarMenuButton onClick={handleLogout} className="cursor-pointer text-destructive hover:bg-destructive/10">
+                <SidebarMenuButton onClick={handleLogout} className="cursor-pointer text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
                   <LogOut className="mr-2 h-4 w-4" />
                   {!collapsed && <span>Sair</span>}
                 </SidebarMenuButton>

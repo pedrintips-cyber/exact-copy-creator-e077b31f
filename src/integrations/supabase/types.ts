@@ -220,6 +220,97 @@ export type Database = {
         }
         Relationships: []
       }
+      product_option_groups: {
+        Row: {
+          active: boolean
+          created_at: string
+          description: string | null
+          id: string
+          max_select: number
+          min_select: number
+          name: string
+          product_id: string
+          selection_type: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          id?: string
+          max_select?: number
+          min_select?: number
+          name: string
+          product_id: string
+          selection_type?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          id?: string
+          max_select?: number
+          min_select?: number
+          name?: string
+          product_id?: string
+          selection_type?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_option_groups_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_option_items: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          name: string
+          option_group_id: string
+          price_adjustment: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name: string
+          option_group_id: string
+          price_adjustment?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name?: string
+          option_group_id?: string
+          price_adjustment?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_option_items_option_group_id_fkey"
+            columns: ["option_group_id"]
+            isOneToOne: false
+            referencedRelation: "product_option_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           active: boolean | null

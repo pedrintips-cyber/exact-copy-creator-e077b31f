@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
 
 interface Product {
   id: string;
@@ -116,8 +117,8 @@ const ProductScrollCard = ({ product }: { product: Product }) => {
     `R$ ${price.toFixed(2).replace(".", ",")}`;
 
   return (
-    <a
-      href="#"
+    <Link
+      to={`/produto/${product.id}`}
       className={`flex-shrink-0 w-[160px] snap-start rounded-2xl overflow-hidden product-card ${
         product.is_best_seller ? "border-2 border-success animate-pulse-green" : ""
       }`}
@@ -144,7 +145,7 @@ const ProductScrollCard = ({ product }: { product: Product }) => {
           </span>
         )}
       </div>
-    </a>
+    </Link>
   );
 };
 
