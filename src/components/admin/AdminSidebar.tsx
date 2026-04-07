@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, Package, FolderOpen, Image, Star,
-  ShoppingCart, Users, Settings, LogOut, Beef, Beer, UtensilsCrossed
+  ShoppingCart, Users, Settings, LogOut, Pizza, UtensilsCrossed
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useNavigate } from "react-router-dom";
@@ -21,8 +21,8 @@ const menuItems = [
 ];
 
 const kitItems = [
-  { title: "Categorias do Kit", url: "/admin/kit-categorias", icon: UtensilsCrossed },
-  { title: "Itens do Kit", url: "/admin/kit-itens", icon: Beef },
+  { title: "Categorias do Combo", url: "/admin/kit-categorias", icon: UtensilsCrossed },
+  { title: "Itens do Combo", url: "/admin/kit-itens", icon: Pizza },
 ];
 
 const configItems = [
