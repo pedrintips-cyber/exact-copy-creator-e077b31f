@@ -42,7 +42,6 @@ const CategoryPage = () => {
           .order("sort_order");
         setProducts((data || []).filter((p: any) => p.old_price && p.old_price > p.new_price));
       } else {
-        // Find category by slug
         const { data: cats } = await supabase
           .from("categories")
           .select("id")
@@ -83,48 +82,54 @@ const CategoryPage = () => {
         {loading ? (
           <div className="grid grid-cols-2 gap-3">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-48 bg-muted animate-pulse rounded-2xl" />
+              <div key={i} className="h-40 bg-muted animate-pulse rounded-2xl" />
             ))}
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-12">
             <span className="text-4xl block mb-3">{meta.emoji}</span>
-            <p className="text-muted-foreground text-sm">Nenhum produto encontrado nesta categoria.</p>
+            <p className="text-muted-foreground text-sm">Nenhum produto encontrado.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3">
-            {products.map((product) => (
-              <Link
-                key={product.id}
-                to={`/produto/${product.id}`}
-                className={`rounded-2xl overflow-hidden ${
-                  product.is_best_seller ? "border-2 border-success animate-pulse-green" : ""
-                }`}
-              >
-                <div className="w-full rounded-2xl overflow-hidden border border-border bg-muted">
-                  {product.image_url ? (
-                    <img src={product.image_url} alt={product.name} className="w-full h-auto object-contain" loading="lazy" />
-                  ) : (
-                    <div className="w-full aspect-square flex items-center justify-center text-3xl">{meta.emoji}</div>
-                  )}
-                </div>
-                <div className="p-2 flex flex-col">
-                  <h3 className="text-xs font-semibold text-foreground leading-tight line-clamp-2">{product.name}</h3>
-                  <span className="text-[10px] text-success mt-0.5">Frete Grátis</span>
-                  {product.old_price && (
-                    <div className="text-[10px] mt-0.5">
-                      de <span className="line-through text-muted-foreground">{formatPrice(product.old_price)}</span> por
-                    </div>
-                  )}
-                  <span className="text-success font-bold text-base">{formatPrice(product.new_price)}</span>
-                  {product.is_best_seller && (
-                    <span className="text-[9px] mt-0.5">
-                      🔥 <b className="bg-destructive text-destructive-foreground rounded px-1 py-0.5">{product.stock} un.</b> restantes
-                    </span>
-                  )}
-                </div>
-              </Link>
-            ))}
+            {products.map((product) => {
+              const discount = product.old_price
+                ? Math.round(((product.old_price - product.new_price) / product.old_price) * 100)
+                : 0;
+
+              return (
+                <Link
+                  key={product.id}
+                  to={`/produto/${product.id}`}
+                  className="rounded-2xl overflow-hidden border border-border bg-card shadow-sm active:scale-[0.97] transition-transform"
+                >
+                  <div className="relative w-full aspect-square bg-muted flex items-center justify-center">
+                    {discount > 0 && (
+                      <span className="absolute top-1.5 left-1.5 bg-destructive text-destructive-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full z-10">
+                        -{discount}%
+                      </span>
+                    )}
+                    {product.image_url ? (
+                      <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" loading="lazy" />
+                    ) : (
+                      <span className="text-4xl">{meta.emoji}</span>
+                    )}
+                  </div>
+                  <div className="p-2">
+                    <h3 className="text-xs font-semibold text-foreground leading-tight line-clamp-2">{product.name}</h3>
+                    {product.old_price && (
+                      <span className="text-[10px] line-through text-muted-foreground">{formatPrice(product.old_price)}</span>
+                    )}
+                    <span className="block text-success font-bold text-sm">{formatPrice(product.new_price)}</span>
+                    {product.is_best_seller && (
+                      <span className="text-[9px]">
+                        🔥 <b className="bg-destructive text-destructive-foreground rounded px-1 py-0.5">{product.stock} un.</b>
+                      </span>
+                    )}
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         )}
       </div>
