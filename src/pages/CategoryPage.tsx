@@ -33,32 +33,22 @@ const CategoryPage = () => {
     const load = async () => {
       setLoading(true);
 
-      if (slug === "promocoes") {
+      const { data: cats } = await supabase
+        .from("categories")
+        .select("id")
+        .eq("slug", slug || "")
+        .limit(1);
+
+      if (cats && cats.length > 0) {
         const { data } = await supabase
           .from("products")
           .select("id, name, image_url, old_price, new_price, is_best_seller, stock")
           .eq("active", true)
-          .not("old_price", "is", null)
+          .eq("category_id", cats[0].id)
           .order("sort_order");
-        setProducts((data || []).filter((p: any) => p.old_price && p.old_price > p.new_price));
+        setProducts(data || []);
       } else {
-        const { data: cats } = await supabase
-          .from("categories")
-          .select("id")
-          .eq("slug", slug || "")
-          .limit(1);
-
-        if (cats && cats.length > 0) {
-          const { data } = await supabase
-            .from("products")
-            .select("id, name, image_url, old_price, new_price, is_best_seller, stock")
-            .eq("active", true)
-            .eq("category_id", cats[0].id)
-            .order("sort_order");
-          setProducts(data || []);
-        } else {
-          setProducts([]);
-        }
+        setProducts([]);
       }
       setLoading(false);
     };

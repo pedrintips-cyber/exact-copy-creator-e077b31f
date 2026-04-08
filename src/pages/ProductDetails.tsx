@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, Minus, Plus, ShoppingCart } from "lucide-react";
+import { ArrowLeft, Check, Minus, Plus, ShoppingCart } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/useCart";
@@ -151,13 +151,11 @@ const ProductDetails = () => {
   const validateSelections = () => {
     for (const group of groups) {
       const selected = selectedItems[group.id] || [];
-
       if (selected.length < group.min_select) {
         setSelectionError(`Escolha pelo menos ${group.min_select} opção(ões) em ${group.name}.`);
         return false;
       }
     }
-
     setSelectionError(null);
     return true;
   };
@@ -179,143 +177,184 @@ const ProductDetails = () => {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-background p-4 text-muted-foreground text-sm">Carregando...</div>;
-  }
-
-  if (!product) {
     return (
-      <div className="min-h-screen bg-background p-4">
-        <Link to="/" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground mb-3">
-          <ArrowLeft className="h-3.5 w-3.5" /> Voltar
-        </Link>
-        <div className="rounded-xl border border-border bg-card p-4 text-center">
-          <p className="text-sm font-semibold">Produto não encontrado.</p>
+      <div className="min-h-screen bg-background">
+        <div className="h-64 bg-muted animate-pulse" />
+        <div className="p-4 space-y-3">
+          <div className="h-6 w-2/3 bg-muted animate-pulse rounded-lg" />
+          <div className="h-4 w-1/3 bg-muted animate-pulse rounded-lg" />
         </div>
       </div>
     );
   }
 
+  if (!product) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
+        <span className="text-6xl mb-4">😕</span>
+        <p className="text-lg font-semibold text-foreground mb-1">Produto não encontrado</p>
+        <p className="text-sm text-muted-foreground mb-4">Esse produto não existe ou foi removido.</p>
+        <Link to="/" className="text-sm font-medium text-primary underline">
+          Voltar ao início
+        </Link>
+      </div>
+    );
+  }
+
+  const discount = product.old_price
+    ? Math.round(((Number(product.old_price) - Number(product.new_price)) / Number(product.old_price)) * 100)
+    : 0;
+
   return (
-    <div className="min-h-screen bg-background pb-8">
-      <div className="mx-auto max-w-lg px-3 py-3">
-        <div className="mb-3 flex items-center justify-between">
-          <Link to="/" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-            <ArrowLeft className="h-3.5 w-3.5" /> Voltar
-          </Link>
-          <Link to="/carrinho" className="text-xs font-medium text-primary">
-            Ver carrinho
-          </Link>
+    <div className="min-h-screen bg-background pb-28">
+      {/* Hero image */}
+      <div className="relative">
+        <div className="w-full aspect-[4/3] bg-muted flex items-center justify-center overflow-hidden">
+          {product.image_url ? (
+            <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+          ) : (
+            <span className="text-7xl">🍕</span>
+          )}
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-          <div className="flex min-h-[150px] items-center justify-center border-b border-border bg-muted p-3">
-            {product.image_url ? (
-              <img src={product.image_url} alt={product.name} className="max-h-[160px] w-full object-contain" />
-            ) : (
-              <div className="text-5xl">🍕</div>
-            )}
-          </div>
+        {/* Back button overlay */}
+        <Link
+          to="/"
+          className="absolute top-4 left-4 h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center border border-border shadow-lg"
+        >
+          <ArrowLeft className="h-4 w-4 text-foreground" />
+        </Link>
 
-          <div className="p-3 space-y-3">
-            <div>
-              <h1 className="text-base font-bold leading-tight text-foreground">{product.name}</h1>
-              {product.description && (
-                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{product.description}</p>
-              )}
-              <div className="mt-2 flex flex-wrap items-center gap-2">
-                {product.old_price && (
-                  <span className="text-xs line-through text-muted-foreground">
-                    {formatPrice(Number(product.old_price))}
-                  </span>
-                )}
-                <span className="text-base font-bold text-success">
-                  {formatPrice(Number(product.new_price) + extraPrice)}
+        {/* Discount badge */}
+        {discount > 0 && (
+          <div className="absolute top-4 right-4 bg-destructive text-destructive-foreground text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+            -{discount}%
+          </div>
+        )}
+
+        {/* Curved overlay */}
+        <div className="absolute -bottom-4 left-0 right-0 h-6 bg-background rounded-t-[24px]" />
+      </div>
+
+      {/* Product info */}
+      <div className="px-4 -mt-1 space-y-4">
+        <div>
+          <h1 className="text-xl font-bold text-foreground leading-tight">{product.name}</h1>
+          {product.description && (
+            <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{product.description}</p>
+          )}
+          <div className="mt-3 flex items-baseline gap-2.5">
+            {product.old_price && (
+              <span className="text-sm line-through text-muted-foreground">
+                {formatPrice(Number(product.old_price))}
+              </span>
+            )}
+            <span className="text-2xl font-bold text-success">
+              {formatPrice(Number(product.new_price) + extraPrice)}
+            </span>
+          </div>
+        </div>
+
+        {/* Option groups */}
+        {groups.map((group) => {
+          const selected = selectedItems[group.id] || [];
+          const groupItems = groupedItems[group.id] || [];
+
+          return (
+            <div key={group.id}>
+              <div className="flex items-center justify-between mb-2.5">
+                <div>
+                  <h2 className="text-sm font-bold text-foreground">{group.name}</h2>
+                  <p className="text-xs text-muted-foreground">
+                    {group.description ||
+                      (group.selection_type === "single"
+                        ? "Escolha 1 opção"
+                        : `De ${group.min_select} até ${group.max_select} opções`)}
+                  </p>
+                </div>
+                <span className="text-[10px] font-semibold uppercase tracking-wider bg-primary/10 text-primary px-2 py-1 rounded-full">
+                  Obrigatório
                 </span>
               </div>
-            </div>
 
-            {groups.map((group) => {
-              const selected = selectedItems[group.id] || [];
-              const groupItems = groupedItems[group.id] || [];
+              <div className="space-y-2">
+                {groupItems.map((item) => {
+                  const active = selected.includes(item.id);
 
-              return (
-                <section key={group.id} className="rounded-xl border border-border bg-background p-3">
-                  <div className="mb-2">
-                    <h2 className="text-sm font-semibold text-foreground">{group.name}</h2>
-                    <p className="text-[10px] text-muted-foreground">
-                      {group.description ||
-                        (group.selection_type === "single"
-                          ? "Escolha 1 opção"
-                          : `De ${group.min_select} até ${group.max_select} opções`)}
-                    </p>
-                  </div>
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => toggleSelection(group, item.id)}
+                      className={`flex w-full items-center gap-3 rounded-2xl border-2 px-4 py-3 text-left transition-all ${
+                        active
+                          ? "border-primary bg-primary/5 shadow-sm shadow-primary/10"
+                          : "border-border bg-card hover:border-muted-foreground/30"
+                      }`}
+                    >
+                      {/* Radio / Check indicator */}
+                      <div
+                        className={`h-5 w-5 shrink-0 rounded-full border-2 flex items-center justify-center transition-colors ${
+                          active
+                            ? "border-primary bg-primary"
+                            : "border-muted-foreground/40 bg-transparent"
+                        }`}
+                      >
+                        {active && <Check className="h-3 w-3 text-primary-foreground" />}
+                      </div>
 
-                  <div className="space-y-1.5">
-                    {groupItems.map((item) => {
-                      const active = selected.includes(item.id);
+                      <span className="flex-1 text-sm font-medium text-foreground">{item.name}</span>
 
-                      return (
-                        <button
-                          key={item.id}
-                          type="button"
-                          onClick={() => toggleSelection(group, item.id)}
-                          className={`flex w-full items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left transition-colors ${
-                            active
-                              ? "border-primary bg-accent text-accent-foreground"
-                              : "border-border bg-card text-foreground"
-                          }`}
-                        >
-                          <span className="min-w-0 text-xs font-medium leading-tight">{item.name}</span>
-                          <span className="shrink-0 text-[10px] font-semibold text-success">
-                            {item.price_adjustment > 0 ? `+ ${formatPrice(Number(item.price_adjustment))}` : "Incluso"}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </section>
-              );
-            })}
-
-            <div className="flex items-center justify-between rounded-xl border border-border bg-background px-3 py-2">
-              <div>
-                <p className="text-[10px] text-muted-foreground">Quantidade</p>
-                <p className="text-sm font-bold">{quantity}</p>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-7 w-7"
-                  onClick={() => setQuantity((v) => Math.max(1, v - 1))}
-                >
-                  <Minus className="h-3 w-3" />
-                </Button>
-                <Button size="icon" className="h-7 w-7" onClick={() => setQuantity((v) => v + 1)}>
-                  <Plus className="h-3 w-3" />
-                </Button>
+                      <span className={`shrink-0 text-xs font-semibold ${item.price_adjustment > 0 ? "text-success" : "text-muted-foreground"}`}>
+                        {item.price_adjustment > 0 ? `+ ${formatPrice(Number(item.price_adjustment))}` : "Incluso"}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
+          );
+        })}
 
-            {selectionError && (
-              <div className="rounded-xl border border-border bg-background px-3 py-2 text-xs text-muted-foreground">
-                {selectionError}
-              </div>
-            )}
-
-            <div className="rounded-xl border border-border bg-background p-3">
-              <div className="flex items-center justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="text-[10px] text-muted-foreground">Total do pedido</p>
-                  <p className="text-sm font-bold text-success break-words">{formatPrice(totalPrice)}</p>
-                </div>
-                <Button onClick={handleAddToCart} size="sm" className="h-9 gap-1.5 rounded-xl px-3 text-xs shrink-0">
-                  <ShoppingCart className="h-3.5 w-3.5" /> Adicionar
-                </Button>
-              </div>
-            </div>
+        {/* Quantity */}
+        <div className="flex items-center justify-between bg-card rounded-2xl border border-border px-4 py-3">
+          <span className="text-sm font-semibold text-foreground">Quantidade</span>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8 rounded-full"
+              onClick={() => setQuantity((v) => Math.max(1, v - 1))}
+            >
+              <Minus className="h-3.5 w-3.5" />
+            </Button>
+            <span className="text-lg font-bold text-foreground w-6 text-center">{quantity}</span>
+            <Button
+              size="icon"
+              className="h-8 w-8 rounded-full"
+              onClick={() => setQuantity((v) => v + 1)}
+            >
+              <Plus className="h-3.5 w-3.5" />
+            </Button>
           </div>
         </div>
+
+        {selectionError && (
+          <div className="rounded-2xl bg-destructive/10 border border-destructive/20 px-4 py-3 text-xs text-destructive font-medium">
+            ⚠️ {selectionError}
+          </div>
+        )}
+      </div>
+
+      {/* Fixed bottom bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-30 bg-card/95 backdrop-blur-md border-t border-border px-4 py-3 safe-area-pb">
+        <Button
+          onClick={handleAddToCart}
+          className="w-full h-12 rounded-2xl text-base font-bold gap-2 shadow-lg shadow-primary/20"
+        >
+          <ShoppingCart className="h-5 w-5" />
+          Adicionar · {formatPrice(totalPrice)}
+        </Button>
       </div>
     </div>
   );
