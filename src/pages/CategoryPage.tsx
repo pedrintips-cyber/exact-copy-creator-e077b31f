@@ -24,11 +24,11 @@ const categoryMeta: Record<string, { title: string; emoji: string }> = {
 };
 
 const CategoryPage = () => {
-  const isPromo = (slug || "") === "promocoes";
   const { slug } = useParams<{ slug: string }>();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const meta = categoryMeta[slug || ""] || { title: slug, emoji: "📦" };
+  const isPromo = slug === "promocoes";
 
   useEffect(() => {
     const load = async () => {
