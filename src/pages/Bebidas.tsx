@@ -46,14 +46,17 @@ const Promocoes = () => {
     <div className="min-h-screen bg-background pb-20">
       <CartButton />
 
-      {/* Hero header */}
-      <div className="bg-gradient-to-br from-primary to-primary/80 px-4 py-6 text-center">
-        <Flame className="h-8 w-8 text-primary-foreground mx-auto mb-1" />
-        <h1 className="text-xl font-bold text-primary-foreground">Promoção do Dia</h1>
-        <p className="text-primary-foreground/80 text-xs mt-1">Oferta especial por tempo limitado!</p>
-      </div>
+      <div className="mx-auto max-w-lg px-4 py-4">
+        <div className="mb-4 rounded-3xl border border-border bg-card p-4 shadow-sm">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
+            <Flame className="h-3.5 w-3.5" /> Oferta do dia
+          </div>
+          <h1 className="text-lg font-black text-foreground">Promoção do Dia</h1>
+          <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+            Um único destaque bem apresentado, sem cabeçalho gigante e com foco total no produto.
+          </p>
+        </div>
 
-      <div className="max-w-lg mx-auto px-4 py-4">
         {loading ? (
           <div className="text-center py-12 text-muted-foreground text-sm">Carregando...</div>
         ) : !product ? (
@@ -64,9 +67,8 @@ const Promocoes = () => {
           </div>
         ) : (
           <Link to={`/produto/${product.id}`} className="block">
-            <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-lg">
-              {/* Product image - large */}
-              <div className="relative bg-muted flex items-center justify-center min-h-[220px] p-4">
+            <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-lg">
+              <div className="relative flex min-h-[220px] items-center justify-center border-b border-border bg-muted p-4">
                 {discount > 0 && (
                   <div className="absolute top-3 left-3 bg-destructive text-destructive-foreground text-xs font-bold px-2.5 py-1 rounded-full">
                     -{discount}%
@@ -79,26 +81,25 @@ const Promocoes = () => {
                 )}
               </div>
 
-              {/* Product info */}
-              <div className="p-4 space-y-3">
+              <div className="space-y-3 p-4">
                 <div>
-                  <h2 className="text-xl font-bold text-foreground">{product.name}</h2>
+                  <h2 className="text-lg font-bold text-foreground">{product.name}</h2>
                   {product.description && (
                     <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{product.description}</p>
                   )}
                 </div>
 
                 <div className="flex items-end justify-between">
-                  <div>
+                  <div className="min-w-0">
                     {product.old_price && (
                       <p className="text-xs text-muted-foreground line-through">
                         {formatPrice(Number(product.old_price))}
                       </p>
                     )}
-                    <p className="text-2xl font-black text-success">{formatPrice(Number(product.new_price))}</p>
+                    <p className="text-xl font-black text-success break-words">{formatPrice(Number(product.new_price))}</p>
                   </div>
 
-                  <Button size="sm" className="gap-1.5 text-xs">
+                  <Button size="sm" className="gap-1.5 rounded-xl text-xs shrink-0">
                     <ShoppingCart className="h-3.5 w-3.5" /> Ver produto
                   </Button>
                 </div>

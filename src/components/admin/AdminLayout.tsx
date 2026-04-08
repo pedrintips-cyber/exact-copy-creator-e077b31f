@@ -29,9 +29,9 @@ const AdminLayout = () => {
       <div className="admin-theme min-h-screen flex w-full bg-background text-foreground">
         <AdminSidebar />
         <div className="flex-1 flex flex-col min-w-0">
-          <header className="h-12 flex items-center border-b bg-background px-3 shrink-0">
+            <header className="h-12 flex items-center border-b bg-background px-3 shrink-0 text-foreground">
             <SidebarTrigger className="mr-3" />
-            <span className="text-sm font-medium text-muted-foreground truncate">Painel Administrativo</span>
+              <span className="text-sm font-medium text-foreground truncate">Painel Administrativo</span>
           </header>
           <main className="flex-1 overflow-auto bg-background p-3 md:p-6">
             <Outlet />

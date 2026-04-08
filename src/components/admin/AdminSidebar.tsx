@@ -64,7 +64,7 @@ export function AdminSidebar() {
   return (
     <Sidebar
       collapsible="icon"
-      className="border-sidebar-border bg-sidebar text-sidebar-foreground [&_a]:text-sidebar-foreground [&_button]:text-sidebar-foreground [&_svg]:text-sidebar-foreground"
+      className="border-sidebar-border bg-sidebar text-sidebar-foreground [&_a]:text-sidebar-foreground [&_button]:text-sidebar-foreground [&_span]:text-sidebar-foreground [&_svg]:text-sidebar-foreground"
     >
       <SidebarContent>
         <SidebarGroup>
