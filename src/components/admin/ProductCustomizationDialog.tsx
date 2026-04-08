@@ -349,6 +349,10 @@ export function ProductCustomizationDialog({ product }: { product: ProductSummar
                   </div>
 
                   <div className="space-y-2">
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Opções que o cliente verá:</p>
+                    {(groupedItems[group.id] || []).length === 0 && (
+                      <p className="text-sm text-destructive/80 italic">⚠️ Nenhuma opção adicionada. Adicione abaixo para o cliente poder escolher.</p>
+                    )}
                     {(groupedItems[group.id] || []).map((item) => (
                       <div key={item.id} className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-background p-3">
                         <div>
