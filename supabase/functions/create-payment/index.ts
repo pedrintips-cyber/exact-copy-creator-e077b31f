@@ -58,27 +58,34 @@ serve(async (req) => {
     }
 
     // Create Paradise transaction
+    const paradisePayload = {
+      amount: amountInCents,
+      description: `Pedido #${order.id.slice(0, 8)}`,
+      reference: reference,
+      source: "api_externa",
+      customer: {
+        name: customerName,
+        email: customerEmail,
+        phone: customerPhone.replace(/\D/g, ""),
+        document: customerDocument.replace(/\D/g, ""),
+      },
+    };
+
+    console.log("Paradise request payload:", JSON.stringify(paradisePayload));
+    console.log("API Key prefix:", PARADISE_API_KEY.slice(0, 6) + "...");
+
     const paradiseResponse = await fetch(`${PARADISE_API_URL}/transaction.php`, {
       method: "POST",
       headers: {
         "X-API-Key": PARADISE_API_KEY,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        amount: amountInCents,
-        description: `Pedido #${order.id.slice(0, 8)}`,
-        reference: reference,
-        source: "api_externa",
-        customer: {
-          name: customerName,
-          email: customerEmail,
-          phone: customerPhone.replace(/\D/g, ""),
-          document: customerDocument.replace(/\D/g, ""),
-        },
-      }),
+      body: JSON.stringify(paradisePayload),
     });
 
     const paradiseData = await paradiseResponse.json();
+    console.log("Paradise response status:", paradiseResponse.status);
+    console.log("Paradise response body:", JSON.stringify(paradiseData));
 
     if (!paradiseResponse.ok || paradiseData.status !== "success") {
       console.error("Paradise API error:", paradiseData);
