@@ -82,7 +82,7 @@ const CategoryPage = () => {
             <p className="text-muted-foreground text-sm">Nenhum produto encontrado.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3">
+          <div className={isPromo ? "flex flex-col gap-4" : "grid grid-cols-2 gap-3"}>
             {products.map((product) => {
               const discount = product.old_price
                 ? Math.round(((product.old_price - product.new_price) / product.old_price) * 100)
