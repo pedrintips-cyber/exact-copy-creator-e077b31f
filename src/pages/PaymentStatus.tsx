@@ -29,13 +29,6 @@ const PaymentStatus = () => {
 
     const interval = setInterval(async () => {
       try {
-        const { data, error } = await supabase.functions.invoke("check-payment", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-          body: null,
-        });
-
-        // Use fetch directly for GET with query params
         const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
         const res = await fetch(
           `https://${projectId}.supabase.co/functions/v1/check-payment?transaction_id=${transactionId}`,
