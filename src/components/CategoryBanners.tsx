@@ -2,72 +2,60 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
-interface CategoryBannerData {
-  key: string;
+interface CategoryBanner {
+  id: string;
+  name: string;
   slug: string;
-  fallbackLabel: string;
+  icon: string;
+  banner_image_url: string | null;
 }
 
-const CATEGORY_BANNERS: CategoryBannerData[] = [
-  { key: "banner_promocoes", slug: "promocoes", fallbackLabel: "🔥 Promoções" },
-  { key: "banner_pizzas", slug: "pizzas", fallbackLabel: "🍕 Pizzas" },
-  { key: "banner_bebidas", slug: "bebidas", fallbackLabel: "🥤 Bebidas" },
-];
+const categoryOrder = ["promocoes", "pizzas", "bebidas"];
 
 const CategoryBanners = () => {
-  const [images, setImages] = useState<Record<string, string>>({});
+  const [categories, setCategories] = useState<CategoryBanner[]>([]);
 
   useEffect(() => {
     const load = async () => {
       const { data } = await supabase
-        .from("site_settings")
-        .select("key, value")
-        .in("key", CATEGORY_BANNERS.map((b) => b.key));
-      const map: Record<string, string> = {};
-      data?.forEach((s) => { map[s.key] = s.value || ""; });
-      setImages(map);
+        .from("categories")
+        .select("id, name, slug, icon, banner_image_url")
+        .eq("active", true)
+        .in("slug", categoryOrder);
+
+      const sorted = ((data as CategoryBanner[]) || []).sort(
+        (a, b) => categoryOrder.indexOf(a.slug) - categoryOrder.indexOf(b.slug)
+      );
+
+      setCategories(sorted);
     };
+
     load();
   }, []);
 
   return (
     <section className="px-4 py-4 space-y-3">
-      {CATEGORY_BANNERS.map((banner, i) => {
-        const imageUrl = images[banner.key];
-        const isPromo = i === 0;
-
-        return (
-          <Link
-            key={banner.key}
-            to={`/categoria/${banner.slug}`}
-            className={`block overflow-hidden rounded-2xl shadow-lg active:scale-[0.98] transition-transform ${
-              isPromo ? "ring-2 ring-destructive/50" : ""
-            }`}
-          >
-            {imageUrl ? (
-              <img
-                src={imageUrl}
-                alt={banner.fallbackLabel}
-                className={`w-full object-cover ${isPromo ? "h-44" : "h-32"}`}
-              />
-            ) : (
-              <div
-                className={`w-full flex items-center justify-center ${
-                  isPromo
-                    ? "h-44 bg-gradient-to-r from-destructive to-destructive/70"
-                    : i === 1
-                    ? "h-32 bg-gradient-to-r from-primary to-primary/70"
-                    : "h-32 bg-gradient-to-r from-accent to-accent/70"
-                }`}
-              >
-                <span className={`font-black ${isPromo ? "text-2xl text-destructive-foreground" : "text-xl text-foreground"}`}>
-                  {banner.fallbackLabel}
-                </span>
-              </div>
-            )}
-          </Link>
-        );
-      })}
+      {categories.map((category, index) => (
+        <Link
+          key={category.id}
+          to={`/categoria/${category.slug}`}
+          className={`block overflow-hidden rounded-2xl shadow-lg active:scale-[0.98] transition-transform ${index === 0 ? "ring-2 ring-destructive/50" : ""}`}
+        >
+          {category.banner_image_url ? (
+            <img
+              src={category.banner_image_url}
+              alt={category.name}
+              className={`w-full object-cover ${index === 0 ? "h-44" : "h-32"}`}
+              loading={index === 0 ? "eager" : "lazy"}
+              fetchPriority={index === 0 ? "high" : "auto"}
+            />
+          ) : (
+            <div className={`w-full flex items-center justify-center bg-muted ${index === 0 ? "h-44" : "h-32"}`}>
+              <span className="text-5xl">{category.icon}</span>
+            </div>
+          )}
+        </Link>
+      ))}
     </section>
   );
 };
