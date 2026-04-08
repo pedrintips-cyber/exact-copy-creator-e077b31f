@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Minus, Plus, ShoppingCart } from "lucide-react";
-import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/useCart";
@@ -46,6 +45,7 @@ const ProductDetails = () => {
   const [selectedItems, setSelectedItems] = useState<Record<string, string[]>>({});
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [selectionError, setSelectionError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -129,18 +129,21 @@ const ProductDetails = () => {
       const selected = current[group.id] || [];
 
       if (group.selection_type === "single") {
+        setSelectionError(null);
         return { ...current, [group.id]: [itemId] };
       }
 
       if (selected.includes(itemId)) {
+        setSelectionError(null);
         return { ...current, [group.id]: selected.filter((id) => id !== itemId) };
       }
 
       if (selected.length >= group.max_select) {
-        toast.error(`Máximo ${group.max_select} opção(ões) em ${group.name}.`);
+        setSelectionError(`Máximo de ${group.max_select} opção(ões) em ${group.name}.`);
         return current;
       }
 
+      setSelectionError(null);
       return { ...current, [group.id]: [...selected, itemId] };
     });
   };
@@ -150,10 +153,12 @@ const ProductDetails = () => {
       const selected = selectedItems[group.id] || [];
 
       if (selected.length < group.min_select) {
-        toast.error(`Escolha pelo menos ${group.min_select} em ${group.name}.`);
+        setSelectionError(`Escolha pelo menos ${group.min_select} opção(ões) em ${group.name}.`);
         return false;
       }
     }
+
+    setSelectionError(null);
     return true;
   };
 
@@ -170,7 +175,6 @@ const ProductDetails = () => {
       selections: selectedOptionObjects,
     });
 
-    toast.success("Adicionado ao carrinho!");
     navigate("/carrinho");
   };
 
@@ -192,10 +196,9 @@ const ProductDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="max-w-lg mx-auto px-3 py-3">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-3">
+    <div className="min-h-screen bg-background pb-8">
+      <div className="mx-auto max-w-lg px-3 py-3">
+        <div className="mb-3 flex items-center justify-between">
           <Link to="/" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
             <ArrowLeft className="h-3.5 w-3.5" /> Voltar
           </Link>
@@ -204,43 +207,39 @@ const ProductDetails = () => {
           </Link>
         </div>
 
-        {/* Product Card */}
-        <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-          {/* Image */}
-          <div className="flex items-center justify-center bg-muted border-b border-border p-3 min-h-[160px]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+          <div className="flex min-h-[150px] items-center justify-center border-b border-border bg-muted p-3">
             {product.image_url ? (
-              <img src={product.image_url} alt={product.name} className="max-h-[180px] w-full object-contain" />
+              <img src={product.image_url} alt={product.name} className="max-h-[160px] w-full object-contain" />
             ) : (
               <div className="text-5xl">🍕</div>
             )}
           </div>
 
           <div className="p-3 space-y-3">
-            {/* Name & Price */}
             <div>
-              <h1 className="text-lg font-bold text-foreground leading-tight">{product.name}</h1>
+              <h1 className="text-base font-bold leading-tight text-foreground">{product.name}</h1>
               {product.description && (
-                <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{product.description}</p>
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{product.description}</p>
               )}
-              <div className="mt-2 flex items-baseline gap-2">
+              <div className="mt-2 flex flex-wrap items-center gap-2">
                 {product.old_price && (
                   <span className="text-xs line-through text-muted-foreground">
                     {formatPrice(Number(product.old_price))}
                   </span>
                 )}
-                <span className="text-lg font-bold text-success">
+                <span className="text-base font-bold text-success">
                   {formatPrice(Number(product.new_price) + extraPrice)}
                 </span>
               </div>
             </div>
 
-            {/* Option Groups */}
             {groups.map((group) => {
               const selected = selectedItems[group.id] || [];
               const groupItems = groupedItems[group.id] || [];
 
               return (
-                <section key={group.id} className="rounded-lg border border-border bg-background p-3">
+                <section key={group.id} className="rounded-xl border border-border bg-background p-3">
                   <div className="mb-2">
                     <h2 className="text-sm font-semibold text-foreground">{group.name}</h2>
                     <p className="text-[10px] text-muted-foreground">
@@ -260,14 +259,14 @@ const ProductDetails = () => {
                           key={item.id}
                           type="button"
                           onClick={() => toggleSelection(group, item.id)}
-                          className={`flex w-full items-center justify-between rounded-lg border px-3 py-2 text-left transition-colors ${
+                          className={`flex w-full items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left transition-colors ${
                             active
                               ? "border-primary bg-accent text-accent-foreground"
                               : "border-border bg-card text-foreground"
                           }`}
                         >
-                          <span className="text-xs font-medium">{item.name}</span>
-                          <span className="text-[10px] font-semibold text-success whitespace-nowrap ml-2">
+                          <span className="min-w-0 text-xs font-medium leading-tight">{item.name}</span>
+                          <span className="shrink-0 text-[10px] font-semibold text-success">
                             {item.price_adjustment > 0 ? `+ ${formatPrice(Number(item.price_adjustment))}` : "Incluso"}
                           </span>
                         </button>
@@ -278,8 +277,7 @@ const ProductDetails = () => {
               );
             })}
 
-            {/* Quantity */}
-            <div className="flex items-center justify-between rounded-lg border border-border bg-background px-3 py-2">
+            <div className="flex items-center justify-between rounded-xl border border-border bg-background px-3 py-2">
               <div>
                 <p className="text-[10px] text-muted-foreground">Quantidade</p>
                 <p className="text-sm font-bold">{quantity}</p>
@@ -298,20 +296,25 @@ const ProductDetails = () => {
                 </Button>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Fixed Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-card/95 backdrop-blur px-3 py-2.5 z-50">
-        <div className="max-w-lg mx-auto flex items-center justify-between gap-2">
-          <div className="min-w-0">
-            <p className="text-[10px] text-muted-foreground">Total</p>
-            <p className="text-base font-bold text-success truncate">{formatPrice(totalPrice)}</p>
+            {selectionError && (
+              <div className="rounded-xl border border-border bg-background px-3 py-2 text-xs text-muted-foreground">
+                {selectionError}
+              </div>
+            )}
+
+            <div className="rounded-xl border border-border bg-background p-3">
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-[10px] text-muted-foreground">Total do pedido</p>
+                  <p className="text-sm font-bold text-success break-words">{formatPrice(totalPrice)}</p>
+                </div>
+                <Button onClick={handleAddToCart} size="sm" className="h-9 gap-1.5 rounded-xl px-3 text-xs shrink-0">
+                  <ShoppingCart className="h-3.5 w-3.5" /> Adicionar
+                </Button>
+              </div>
+            </div>
           </div>
-          <Button onClick={handleAddToCart} size="sm" className="gap-1.5 text-xs shrink-0">
-            <ShoppingCart className="h-3.5 w-3.5" /> Adicionar
-          </Button>
         </div>
       </div>
     </div>
