@@ -257,9 +257,16 @@ export function ProductCustomizationDialog({ product }: { product: ProductSummar
         </DialogHeader>
 
         <div className="space-y-4">
+          <div className="rounded-lg border border-dashed border-primary/30 bg-primary/5 p-3 text-sm text-muted-foreground">
+            <p className="font-medium text-foreground mb-1">💡 Como funciona:</p>
+            <p>1. Crie um <b>grupo</b> (ex: "Sabor da Pizza", "Refrigerante")</p>
+            <p>2. Dentro do grupo, adicione as <b>opções</b> (ex: "Calabresa", "4 Queijos")</p>
+            <p>3. O cliente verá o grupo e poderá escolher entre as opções</p>
+          </div>
+
           <Card>
             <CardContent className="space-y-3 p-4">
-              <h3 className="font-semibold">Novo grupo de escolha</h3>
+              <h3 className="font-semibold">➕ Criar novo grupo de escolha</h3>
               <div className="grid gap-2 sm:grid-cols-2">
                 <Input
                   placeholder="Ex.: Sabor da pizza"
@@ -342,6 +349,10 @@ export function ProductCustomizationDialog({ product }: { product: ProductSummar
                   </div>
 
                   <div className="space-y-2">
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Opções que o cliente verá:</p>
+                    {(groupedItems[group.id] || []).length === 0 && (
+                      <p className="text-sm text-destructive/80 italic">⚠️ Nenhuma opção adicionada. Adicione abaixo para o cliente poder escolher.</p>
+                    )}
                     {(groupedItems[group.id] || []).map((item) => (
                       <div key={item.id} className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-background p-3">
                         <div>
