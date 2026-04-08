@@ -2,7 +2,7 @@ import StoreHeader from "@/components/StoreHeader";
 import StatusBadge from "@/components/StatusBadge";
 import CartButton from "@/components/CartButton";
 import CountdownTimer from "@/components/CountdownTimer";
-import ProductList from "@/components/ProductList";
+import CategoryBanners from "@/components/CategoryBanners";
 import ReviewsSection from "@/components/ReviewsSection";
 import LocationWelcome from "@/components/LocationWelcome";
 import BottomNav from "@/components/BottomNav";
@@ -15,7 +15,7 @@ const Index = () => {
       <CartButton />
       <StoreHeader />
       <CountdownTimer />
-      <ProductList />
+      <CategoryBanners />
       <ReviewsSection />
       <BottomNav />
     </div>
