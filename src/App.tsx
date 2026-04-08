@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/hooks/useCart";
 import Index from "./pages/Index.tsx";
-import Promocoes from "./pages/Bebidas.tsx";
+import CategoryPage from "./pages/CategoryPage.tsx";
 
 import AdminLogin from "./pages/AdminLogin.tsx";
 import AdminLayout from "./components/admin/AdminLayout.tsx";
@@ -33,8 +33,7 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/promocoes" element={<Promocoes />} />
-              <Route path="/bebidas" element={<Promocoes />} />
+              <Route path="/categoria/:slug" element={<CategoryPage />} />
               
               <Route path="/produto/:id" element={<ProductDetails />} />
               <Route path="/carrinho" element={<CartPage />} />
