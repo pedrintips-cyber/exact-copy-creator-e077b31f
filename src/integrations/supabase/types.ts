@@ -47,6 +47,7 @@ export type Database = {
       categories: {
         Row: {
           active: boolean | null
+          banner_image_url: string | null
           created_at: string | null
           icon: string | null
           id: string
@@ -57,6 +58,7 @@ export type Database = {
         }
         Insert: {
           active?: boolean | null
+          banner_image_url?: string | null
           created_at?: string | null
           icon?: string | null
           id?: string
@@ -67,6 +69,7 @@ export type Database = {
         }
         Update: {
           active?: boolean | null
+          banner_image_url?: string | null
           created_at?: string | null
           icon?: string | null
           id?: string
