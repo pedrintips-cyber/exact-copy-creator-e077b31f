@@ -93,7 +93,7 @@ const CategoryPage = () => {
                   to={`/produto/${product.id}`}
                   className="rounded-2xl overflow-hidden border border-border bg-card shadow-sm active:scale-[0.97] transition-transform"
                 >
-                  <div className="relative w-full aspect-square bg-muted flex items-center justify-center">
+                  <div className="relative w-full aspect-[4/3] bg-muted flex items-center justify-center">
                     {discount > 0 && (
                       <span className="absolute top-1.5 left-1.5 bg-destructive text-destructive-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full z-10">
                         -{discount}%
