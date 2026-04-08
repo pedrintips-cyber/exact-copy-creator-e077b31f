@@ -44,7 +44,7 @@ const StoreHeader = () => {
 
   return (
     <header className="bg-background border-b border-secondary">
-      <div className="relative h-44 bg-primary">
+      <div className="relative h-56 bg-primary">
         {bannerUrl ? (
           <img
             src={bannerUrl}
@@ -68,8 +68,12 @@ const StoreHeader = () => {
           </div>
         )}
         <div className="absolute bottom-0 left-0 right-0 h-16 bg-background rounded-t-[40px]" />
-        <div className="absolute top-14 left-1/2 -translate-x-1/2 z-10 w-[120px] h-[120px] rounded-full border-4 border-background shadow-lg overflow-hidden bg-background flex items-center justify-center">
-          <span className="text-4xl">🍕</span>
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 z-10 w-[110px] h-[110px] rounded-full border-4 border-background shadow-lg overflow-hidden bg-background flex items-center justify-center">
+          {settings.store_logo ? (
+            <img src={settings.store_logo} alt="Logo" className="w-full h-full object-cover" />
+          ) : (
+            <span className="text-4xl">🍕</span>
+          )}
         </div>
       </div>
 

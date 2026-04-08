@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Save } from "lucide-react";
+import { Save, Upload } from "lucide-react";
 
 const settingsKeys = [
   { key: "store_name", label: "Nome da Loja", placeholder: "Sítio do Churrasco" },
@@ -23,6 +23,7 @@ const settingsKeys = [
 const AdminSettings = () => {
   const [settings, setSettings] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
 
   useEffect(() => { load(); }, []);
 
@@ -31,6 +32,25 @@ const AdminSettings = () => {
     const map: Record<string, string> = {};
     data?.forEach((s) => { map[s.key] = s.value || ""; });
     setSettings(map);
+  };
+
+  const handleLogoUpload = async (file: File) => {
+    setUploadingLogo(true);
+    const ext = file.name.split(".").pop();
+    const path = `logos/${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from("images").upload(path, file);
+    if (error) { setUploadingLogo(false); return; }
+    const { data } = supabase.storage.from("images").getPublicUrl(path);
+    const logoUrl = data.publicUrl;
+
+    const { data: existing } = await supabase.from("site_settings").select("id").eq("key", "store_logo").maybeSingle();
+    if (existing) {
+      await supabase.from("site_settings").update({ value: logoUrl }).eq("id", existing.id);
+    } else {
+      await supabase.from("site_settings").insert({ key: "store_logo", value: logoUrl });
+    }
+    setSettings({ ...settings, store_logo: logoUrl });
+    setUploadingLogo(false);
   };
 
   const handleSave = async () => {
@@ -61,6 +81,25 @@ const AdminSettings = () => {
         <Card>
           <CardHeader><CardTitle className="text-lg">Dados da Loja</CardTitle></CardHeader>
           <CardContent className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Logo da Loja</label>
+              <div className="flex items-center gap-3 mt-1">
+                {settings.store_logo ? (
+                  <img src={settings.store_logo} alt="Logo" className="w-16 h-16 rounded-full object-cover border border-border" />
+                ) : (
+                  <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center text-2xl">🍕</div>
+                )}
+                <label className="cursor-pointer">
+                  <Button variant="outline" size="sm" asChild disabled={uploadingLogo}>
+                    <span><Upload className="w-3.5 h-3.5 mr-1.5" />{uploadingLogo ? "Enviando..." : "Enviar Logo"}</span>
+                  </Button>
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (f) handleLogoUpload(f);
+                  }} />
+                </label>
+              </div>
+            </div>
             {settingsKeys.slice(0, 3).map(({ key, label, placeholder }) => (
               <div key={key}>
                 <label className="text-sm font-medium">{label}</label>
