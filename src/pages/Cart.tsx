@@ -17,7 +17,6 @@ const CartPage = () => {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
-  const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleFinalize = async () => {
@@ -36,7 +35,6 @@ const CartPage = () => {
         body: {
           customerName: customerName.trim(),
           customerPhone: phone.trim(),
-          address: address.trim(),
           address: address.trim(),
           items: items.map((i) => ({
             name: i.productName,
@@ -164,10 +162,8 @@ const CartPage = () => {
               </div>
               <div className="space-y-2">
                 <Input value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="Nome completo *" />
-                <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-mail *" type="email" />
                 <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Telefone / WhatsApp *" inputMode="tel" />
-                <Input value={cpf} onChange={(e) => setCpf(e.target.value)} placeholder="CPF *" inputMode="numeric" />
-                <Input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Endereço de entrega" />
+                <Input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Endereço de entrega *" />
                 <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Observações" className="min-h-20 resize-none" />
               </div>
             </section>
